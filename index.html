@@ -399,22 +399,27 @@ async function saveTxn() {
   const desc = document.getElementById('f-desc').value.trim();
   const date = document.getElementById('f-date').value.trim();
   const bucketId = document.getElementById('f-bucket').value;
+  const txnType = M.type || 'out';
   if (!amount || amount <= 0) { alert('Please enter a valid amount'); return; }
   closeModal();
   toast('Saving...');
   if (M.mode === 'edit') {
-    await api({ action: 'updateTxn', id: M.txnId, type: M.type, amount, desc: desc || (M.type === 'in' ? 'Deposit' : 'Expense'), date, bucketId });
+    await api({ action: 'updateTxn', id: M.txnId, type: txnType, amount,
+      desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, bucketId });
     const t = S.txns.find(x => String(x.id) === String(M.txnId));
-    if (t) Object.assign(t, { type: M.type, amount, desc: desc || (M.type === 'in' ? 'Deposit' : 'Expense'), date, bucketId });
+    if (t) Object.assign(t, { type: txnType, amount,
+      desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, bucketId });
   } else {
-    const result = await api({ action: 'saveTxn', bucketId, type: M.type, amount, desc: desc || (M.type === 'in' ? 'Deposit' : 'Expense'), date, isArchiveEntry: false });
-    S.txns.push({ id: result.id, bucketId, type: M.type, amount, desc: desc || (M.type === 'in' ? 'Deposit' : 'Expense'), date, isArchiveEntry: false });
+    const result = await api({ action: 'saveTxn', bucketId, type: txnType, amount,
+      desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, isArchiveEntry: false });
+    S.txns.push({ id: result.id, bucketId, type: txnType, amount,
+      desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, isArchiveEntry: false });
     S.selected = String(bucketId);
   }
   toast('Saved');
   renderAll();
 }
-
+  
 async function deleteTxn(id) {
   if (!confirm('Delete this transaction?')) return;
   closeModal();
