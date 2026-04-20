@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Sinking Funds</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -10,7 +10,7 @@
     :root {
       --bg-primary: #ffffff;
       --bg-secondary: #f5f5f4;
-      --bg-tertiary: #f0efed;
+      --bg-tertiary: #eeede9;
       --bg-success: #eaf3de;
       --bg-danger: #fcebeb;
       --bg-warning: #faeeda;
@@ -21,12 +21,12 @@
       --text-danger: #a32d2d;
       --text-warning: #854f0b;
       --text-info: #185fa5;
-      --border-tertiary: rgba(0,0,0,0.1);
-      --border-secondary: rgba(0,0,0,0.18);
+      --border-tertiary: rgba(0,0,0,0.09);
+      --border-secondary: rgba(0,0,0,0.16);
       --border-success: rgba(59,109,17,0.35);
       --border-danger: rgba(163,45,45,0.35);
-      --radius-md: 8px;
-      --radius-lg: 12px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
       --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
 
@@ -45,132 +45,137 @@
         --text-danger: #f09595;
         --text-warning: #fac775;
         --text-info: #b5d4f4;
-        --border-tertiary: rgba(255,255,255,0.1);
-        --border-secondary: rgba(255,255,255,0.18);
+        --border-tertiary: rgba(255,255,255,0.08);
+        --border-secondary: rgba(255,255,255,0.16);
         --border-success: rgba(192,221,151,0.35);
         --border-danger: rgba(240,149,149,0.35);
       }
     }
 
-    body {
-      font-family: var(--font);
-      background: var(--bg-tertiary);
-      color: var(--text-primary);
-      min-height: 100vh;
-    }
+    body { font-family: var(--font); background: var(--bg-tertiary); color: var(--text-primary); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+    .container { max-width: 860px; margin: 0 auto; padding: 1rem 1rem 5rem; }
 
-    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 8px; }
+    .top-bar h1 { font-size: 20px; font-weight: 600; color: var(--text-primary); flex: 1; }
+    .top-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
-    .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
-    .top-bar h1 { font-size: 20px; font-weight: 600; color: var(--text-primary); }
-    .top-actions { display: flex; gap: 8px; }
-
-    .btn { font-size: 12px; padding: 6px 14px; border: 0.5px solid var(--border-secondary); border-radius: var(--radius-md); background: transparent; color: var(--text-primary); cursor: pointer; font-family: var(--font); }
-    .btn:hover { background: var(--bg-secondary); }
+    .btn { font-size: 13px; padding: 8px 14px; border: 0.5px solid var(--border-secondary); border-radius: var(--radius-md); background: transparent; color: var(--text-primary); cursor: pointer; font-family: var(--font); white-space: nowrap; -webkit-tap-highlight-color: transparent; }
+    .btn:active { opacity: 0.7; }
     .btn-primary { background: var(--text-primary); color: var(--bg-primary); border-color: var(--text-primary); }
-    .btn-primary:hover { opacity: 0.85; background: var(--text-primary); }
+    .btn-sm { font-size: 12px; padding: 7px 13px; }
 
-    .balance-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
-    .balance-card { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 1rem 1.25rem; border: 0.5px solid var(--border-tertiary); }
-    .acct-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 2px; }
-    .acct-name { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 10px; }
-    .balance-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 6px; }
-    .balance-row .bl { font-size: 12px; color: var(--text-secondary); }
-    .balance-row .bv { font-size: 15px; font-weight: 500; color: var(--text-primary); }
-    .balance-row .bv.muted { font-size: 13px; font-weight: 400; color: var(--text-secondary); }
-    .balance-diff { font-size: 11px; margin-top: 6px; padding: 3px 8px; border-radius: var(--radius-md); display: inline-block; }
+    .balance-strip { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.25rem; }
+    .balance-card { background: var(--bg-primary); border-radius: var(--radius-lg); padding: 1rem 1.1rem; border: 0.5px solid var(--border-tertiary); }
+    .acct-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 1px; }
+    .acct-name { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; }
+    .balance-rows { display: flex; gap: 16px; }
+    .balance-item { flex: 1; }
+    .balance-item .bl { font-size: 11px; color: var(--text-secondary); margin-bottom: 2px; }
+    .balance-item .bv { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+    .balance-item .bv.muted { font-size: 15px; font-weight: 400; color: var(--text-secondary); }
+    .balance-meta { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .balance-diff { font-size: 11px; padding: 3px 8px; border-radius: 99px; display: inline-block; }
     .diff-balanced { background: var(--bg-success); color: var(--text-success); }
     .diff-pos { background: var(--bg-warning); color: var(--text-warning); }
     .diff-neg { background: var(--bg-danger); color: var(--text-danger); }
-    .as-of { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+    .as-of { font-size: 11px; color: var(--text-secondary); }
 
-    .accounts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
-    .account-card { background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
-    .account-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
-    .account-number { font-size: 12px; color: var(--text-secondary); margin-bottom: 2px; }
-    .account-name { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+    .accounts-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.25rem; }
+    .account-card { background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 1rem 1.1rem; }
+    .account-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+    .account-number { font-size: 11px; color: var(--text-secondary); margin-bottom: 1px; }
+    .account-name { font-size: 15px; font-weight: 600; color: var(--text-primary); }
     .account-total .lbl { font-size: 11px; color: var(--text-secondary); text-align: right; }
-    .account-total .amt { font-size: 20px; font-weight: 500; color: var(--text-primary); text-align: right; }
-    .bucket-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: var(--radius-md); cursor: pointer; border: 0.5px solid transparent; }
-    .bucket-row:hover { background: var(--bg-secondary); border-color: var(--border-tertiary); }
-    .bucket-row.active { background: var(--bg-secondary); border-color: var(--border-secondary); }
-    .bucket-name { font-size: 13px; color: var(--text-primary); }
-    .bucket-monthly { font-size: 11px; color: var(--text-secondary); }
-    .bucket-balance { font-size: 13px; font-weight: 500; color: var(--text-primary); }
-    .reconcile-btn { margin-top: 10px; font-size: 12px; padding: 4px 10px; border: 0.5px solid var(--border-secondary); border-radius: var(--radius-md); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: var(--font); }
-    .reconcile-btn:hover { background: var(--bg-secondary); }
+    .account-total .amt { font-size: 20px; font-weight: 600; color: var(--text-primary); text-align: right; }
 
-    .panel { background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
-    .panel-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
-    .panel-title { font-size: 15px; font-weight: 500; color: var(--text-primary); }
-    .panel-balance { font-size: 20px; font-weight: 500; color: var(--text-primary); }
-    .t-account { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border-tertiary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-md); overflow: hidden; }
+    .bucket-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 8px; border-radius: var(--radius-md); cursor: pointer; border: 0.5px solid transparent; -webkit-tap-highlight-color: transparent; }
+    .bucket-row:active { background: var(--bg-secondary); }
+    .bucket-row.active { background: var(--bg-secondary); border-color: var(--border-secondary); }
+    .bucket-left { flex: 1; min-width: 0; }
+    .bucket-name { font-size: 14px; color: var(--text-primary); }
+    .bucket-monthly { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+    .bucket-balance { font-size: 14px; font-weight: 600; color: var(--text-primary); flex-shrink: 0; margin-left: 8px; }
+    .reconcile-btn { margin-top: 12px; font-size: 13px; padding: 10px 14px; border: 0.5px solid var(--border-secondary); border-radius: var(--radius-md); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: var(--font); width: 100%; -webkit-tap-highlight-color: transparent; }
+    .reconcile-btn:active { background: var(--bg-secondary); }
+
+    .panel { background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 1rem 1.1rem; }
+    .panel-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; gap: 8px; }
+    .panel-title { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+    .panel-subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .panel-balance { font-size: 22px; font-weight: 600; color: var(--text-primary); flex-shrink: 0; }
+
+    .t-account { display: flex; flex-direction: column; border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-md); overflow: hidden; gap: 1px; background: var(--border-tertiary); }
     .t-col { background: var(--bg-primary); }
-    .t-col-header { font-size: 11px; font-weight: 500; color: var(--text-secondary); padding: 8px 12px; background: var(--bg-secondary); border-bottom: 0.5px solid var(--border-tertiary); display: flex; justify-content: space-between; }
-    .t-entries { padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; min-height: 80px; }
-    .t-entry { display: flex; align-items: flex-start; gap: 6px; padding: 4px 6px; border-radius: var(--radius-md); }
-    .t-entry:hover { background: var(--bg-secondary); }
-    .t-entry:hover .entry-actions { opacity: 1; }
-    .t-entry.archived-entry { opacity: 0.65; }
-    .t-entry.archived-entry:hover .entry-actions { opacity: 0; }
+    .t-col-header { font-size: 12px; font-weight: 600; color: var(--text-secondary); padding: 9px 12px; background: var(--bg-secondary); display: flex; justify-content: space-between; }
+    .t-entries { padding: 6px 8px; display: flex; flex-direction: column; }
+    .t-entry { display: flex; align-items: center; gap: 8px; padding: 10px 6px; border-radius: 8px; border-bottom: 0.5px solid var(--border-tertiary); }
+    .t-entry:last-child { border-bottom: none; }
+    .t-entry.archived-entry { opacity: 0.6; }
     .entry-info { flex: 1; min-width: 0; }
-    .t-entry-desc { font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .t-entry-date { font-size: 11px; color: var(--text-secondary); opacity: 0.6; }
-    .t-entry-amount { font-size: 12px; font-weight: 500; white-space: nowrap; }
+    .t-entry-desc { font-size: 13px; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .t-entry-date { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+    .t-entry-amount { font-size: 13px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
     .t-entry-amount.in { color: var(--text-success); }
     .t-entry-amount.out { color: var(--text-danger); }
-    .entry-actions { opacity: 0; display: flex; gap: 4px; align-items: center; }
-    .entry-actions button { font-size: 11px; padding: 2px 6px; border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-md); background: transparent; cursor: pointer; color: var(--text-secondary); font-family: var(--font); }
-    .entry-actions .del { color: var(--text-danger); border-color: var(--border-danger); }
-    .no-selection { text-align: center; padding: 2.5rem 1rem; color: var(--text-secondary); font-size: 13px; }
-    .badge { font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 500; background: var(--bg-info); color: var(--text-info); }
-    .archive-badge { font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 500; background: var(--bg-secondary); color: var(--text-secondary); border: 0.5px solid var(--border-secondary); }
+    .entry-btns { display: flex; gap: 6px; flex-shrink: 0; }
+    .entry-btns button { font-size: 12px; padding: 6px 10px; border: 0.5px solid var(--border-tertiary); border-radius: 8px; background: transparent; cursor: pointer; color: var(--text-secondary); font-family: var(--font); -webkit-tap-highlight-color: transparent; }
+    .entry-btns .del { color: var(--text-danger); border-color: var(--border-danger); }
+    .no-entries { font-size: 13px; color: var(--text-secondary); padding: 10px 6px; }
 
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; }
-    .modal { background: var(--bg-primary); border: 0.5px solid var(--border-secondary); border-radius: var(--radius-lg); padding: 1.25rem; width: 420px; max-height: 88vh; overflow-y: auto; }
-    .modal h3 { font-size: 15px; font-weight: 500; margin-bottom: 1rem; color: var(--text-primary); }
-    .form-group { margin-bottom: 12px; }
-    .form-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; display: block; }
-    select, input[type=text], input[type=number] { width: 100%; padding: 7px 10px; border: 0.5px solid var(--border-secondary); border-radius: var(--radius-md); background: var(--bg-primary); color: var(--text-primary); font-size: 13px; font-family: var(--font); }
-    .modal-actions { display: flex; gap: 8px; margin-top: 1rem; }
-    .modal-actions button { flex: 1; padding: 8px; border-radius: var(--radius-md); border: 0.5px solid var(--border-secondary); cursor: pointer; font-size: 13px; font-family: var(--font); }
+    .panel-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 8px; }
+    .btn-archive { font-size: 12px; padding: 8px 12px; border: 0.5px solid var(--border-secondary); border-radius: var(--radius-md); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
+
+    .no-selection { text-align: center; padding: 2.5rem 1rem; color: var(--text-secondary); font-size: 14px; }
+    .badge { font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 500; background: var(--bg-info); color: var(--text-info); }
+    .archive-badge { font-size: 10px; padding: 2px 6px; border-radius: 99px; font-weight: 500; background: var(--bg-secondary); color: var(--text-secondary); border: 0.5px solid var(--border-secondary); margin-left: 4px; }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: flex-end; justify-content: center; z-index: 100; }
+    @media (min-width: 600px) { .overlay { align-items: center; } }
+    .modal { background: var(--bg-primary); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 0 1.1rem 2.5rem; width: 100%; max-height: 92vh; overflow-y: auto; }
+    @media (min-width: 600px) { .modal { border-radius: var(--radius-lg); width: 440px; padding: 1.25rem; max-height: 88vh; } }
+    .modal-handle { width: 36px; height: 4px; background: var(--border-secondary); border-radius: 99px; margin: 12px auto 1rem; }
+    @media (min-width: 600px) { .modal-handle { display: none; } }
+    .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary); }
+    .form-group { margin-bottom: 14px; }
+    .form-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; display: block; }
+    select, input[type=text], input[type=number] { width: 100%; padding: 12px; border: 0.5px solid var(--border-secondary); border-radius: var(--radius-md); background: var(--bg-primary); color: var(--text-primary); font-size: 16px; font-family: var(--font); -webkit-appearance: none; appearance: none; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 1.25rem; }
+    .modal-actions button { flex: 1; padding: 14px; border-radius: var(--radius-md); border: 0.5px solid var(--border-secondary); cursor: pointer; font-size: 15px; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
+
+    .type-toggle { display: flex; gap: 10px; margin-bottom: 16px; }
+    .type-toggle button { flex: 1; padding: 14px; font-size: 15px; font-family: var(--font); border-radius: var(--radius-md); cursor: pointer; background: transparent; border: 0.5px solid var(--border-secondary); -webkit-tap-highlight-color: transparent; }
 
     .recon-summary { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 14px; }
-    .recon-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; color: var(--text-secondary); }
-    .recon-row.bold { font-weight: 500; color: var(--text-primary); border-top: 0.5px solid var(--border-tertiary); padding-top: 8px; margin-top: 4px; }
-    .recon-action { font-size: 13px; font-weight: 500; padding: 10px 14px; border-radius: var(--radius-md); margin: 12px 0; }
+    .recon-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; color: var(--text-secondary); }
+    .recon-row.bold { font-weight: 600; color: var(--text-primary); border-top: 0.5px solid var(--border-tertiary); padding-top: 8px; margin-top: 4px; }
+    .recon-action { font-size: 14px; font-weight: 500; padding: 12px 14px; border-radius: var(--radius-md); margin: 12px 0; line-height: 1.5; }
     .recon-action.balanced { background: var(--bg-success); color: var(--text-success); text-align: center; }
     .recon-action.transfer-out { background: var(--bg-warning); color: var(--text-warning); }
     .recon-action.transfer-in { background: var(--bg-danger); color: var(--text-danger); }
-    .step-label { font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border-tertiary); }
+    .step-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border-tertiary); }
     .step2-box { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px 14px; margin-top: 14px; }
 
-    .manage-bucket-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 0.5px solid var(--border-tertiary); }
-    .del-bucket { padding: 5px 9px; border: 0.5px solid var(--border-danger); border-radius: var(--radius-md); background: transparent; color: var(--text-danger); cursor: pointer; font-size: 12px; white-space: nowrap; font-family: var(--font); }
-    .del-bucket:hover { background: var(--bg-danger); }
-    .manage-section-label { font-size: 11px; font-weight: 500; color: var(--text-secondary); margin: 12px 0 6px; }
-    .add-bucket-row { display: flex; gap: 8px; margin-top: 10px; align-items: flex-end; flex-wrap: wrap; }
+    .manage-bucket-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 0.5px solid var(--border-tertiary); }
+    .manage-bucket-row input[type=text] { flex: 2; min-width: 0; }
+    .manage-bucket-row input[type=number] { width: 70px; flex: none; }
+    .del-bucket { padding: 9px 10px; border: 0.5px solid var(--border-danger); border-radius: var(--radius-md); background: transparent; color: var(--text-danger); cursor: pointer; font-size: 13px; white-space: nowrap; font-family: var(--font); flex-shrink: 0; }
+    .manage-section-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .add-bucket-row { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+    .add-bucket-row .arow { display: flex; gap: 8px; }
+    .add-bucket-row .arow input[type=text] { flex: 2; }
+    .add-bucket-row .arow input[type=number] { width: 80px; flex: none; }
 
-    .btn-archive { font-size: 12px; padding: 5px 12px; border: 0.5px solid var(--border-secondary); border-radius: var(--radius-md); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: var(--font); }
-    .btn-archive:hover { background: var(--bg-secondary); }
     .archive-confirm-box { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 14px; margin-bottom: 1rem; }
-    .archive-confirm-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; }
+    .archive-confirm-box p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; }
     .archive-confirm-box strong { color: var(--text-primary); }
 
-    .loading-screen { text-align: center; padding: 5rem 1rem; color: var(--text-secondary); font-size: 13px; }
-    .spinner { width: 24px; height: 24px; border: 2px solid var(--border-tertiary); border-top-color: var(--text-secondary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
+    .loading-screen { text-align: center; padding: 5rem 1rem; color: var(--text-secondary); font-size: 14px; }
+    .spinner { width: 28px; height: 28px; border: 2.5px solid var(--border-tertiary); border-top-color: var(--text-secondary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .error-screen { text-align: center; padding: 4rem 1rem; }
-    .error-screen p { font-size: 13px; margin-bottom: 8px; }
 
-    .toast { position: fixed; bottom: 20px; right: 20px; background: var(--text-primary); color: var(--bg-primary); font-size: 12px; padding: 8px 16px; border-radius: var(--radius-md); z-index: 300; opacity: 0; transition: opacity 0.2s; pointer-events: none; font-family: var(--font); }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--text-primary); color: var(--bg-primary); font-size: 13px; padding: 10px 20px; border-radius: 99px; z-index: 300; opacity: 0; transition: opacity 0.2s; pointer-events: none; font-family: var(--font); white-space: nowrap; }
     .toast.show { opacity: 1; }
-
-    @media (max-width: 600px) {
-      .balance-strip, .accounts-grid { grid-template-columns: 1fr; }
-      .t-account { grid-template-columns: 1fr; }
-      .modal { width: 95vw; }
-    }
   </style>
 </head>
 <body>
@@ -178,8 +183,8 @@
   <div class="top-bar">
     <h1>Sinking funds</h1>
     <div class="top-actions">
-      <button class="btn" onclick="openManage()">Manage funds</button>
-      <button class="btn btn-primary" onclick="openAdd(null)">+ Add transaction</button>
+      <button class="btn btn-sm" onclick="openManage()">Manage</button>
+      <button class="btn btn-primary btn-sm" onclick="openAdd(null)">+ Add</button>
     </div>
   </div>
   <div id="main-content">
@@ -211,21 +216,21 @@ async function loadData() {
   try {
     const data = await api({ action: 'getData' });
     S.accounts = data.accounts.map(a => ({
-      ...a,
+      ...a, id: String(a.id),
       lastReal: (a.lastReal !== '' && a.lastReal !== null && a.lastReal !== undefined) ? parseFloat(a.lastReal) : null
     }));
-    S.buckets = data.buckets.map(b => ({ ...b, monthlyIn: parseFloat(b.monthlyIn) || 0 }));
+    S.buckets = data.buckets.map(b => ({ ...b, id: String(b.id), accountId: String(b.accountId), monthlyIn: parseFloat(b.monthlyIn) || 0 }));
     S.txns = data.txns.map(t => ({
-      ...t,
+      ...t, id: String(t.id), bucketId: String(t.bucketId),
       amount: parseFloat(t.amount) || 0,
       isArchiveEntry: t.isArchiveEntry === true || String(t.isArchiveEntry).toUpperCase() === 'TRUE'
     }));
-    S.archives = data.archives || [];
+    S.archives = (data.archives || []).map(a => ({ ...a, bucketId: String(a.bucketId) }));
     renderAll();
   } catch (err) {
     document.getElementById('main-content').innerHTML = `<div class="error-screen">
-      <p style="color:var(--text-danger);">Could not connect to your Google Sheet.</p>
-      <p style="color:var(--text-secondary);">Make sure the Apps Script is deployed with "Anyone" access, then retry.</p>
+      <p style="color:var(--text-danger);font-size:14px;">Could not connect to your Google Sheet.</p>
+      <p style="color:var(--text-secondary);font-size:13px;margin-top:6px;">Make sure the Apps Script is deployed with "Anyone" access.</p>
       <button class="btn" onclick="location.reload()" style="margin-top:14px;">Retry</button>
     </div>`;
   }
@@ -239,19 +244,19 @@ const fmtDate = d => {
   if (parts.length >= 3) return `${parts[1]}/${parts[2]}`;
   return s;
 };
-const bucketBal = id => S.txns.filter(t => String(t.bucketId) === String(id)).reduce((s,t) => t.type === 'in' ? s + t.amount : s - t.amount, 0);
-const acctTotal = id => S.buckets.filter(b => String(b.accountId) === String(id)).reduce((s,b) => s + bucketBal(b.id), 0);
+const bucketBal = id => S.txns.filter(t => t.bucketId === String(id)).reduce((s,t) => t.type === 'in' ? s + t.amount : s - t.amount, 0);
+const acctTotal = id => S.buckets.filter(b => b.accountId === String(id)).reduce((s,b) => s + bucketBal(b.id), 0);
 
 function applyTypeStyles(type) {
   const btnIn = document.getElementById('type-btn-in');
   const btnOut = document.getElementById('type-btn-out');
   if (!btnIn || !btnOut) return;
   if (type === 'in') {
-    btnIn.style.fontWeight = '600'; btnIn.style.borderWidth = '2.5px'; btnIn.style.opacity = '1';
-    btnOut.style.fontWeight = '400'; btnOut.style.borderWidth = '0.5px'; btnOut.style.opacity = '0.45';
+    btnIn.style.fontWeight = '700'; btnIn.style.borderWidth = '2.5px'; btnIn.style.opacity = '1';
+    btnOut.style.fontWeight = '400'; btnOut.style.borderWidth = '0.5px'; btnOut.style.opacity = '0.4';
   } else {
-    btnOut.style.fontWeight = '600'; btnOut.style.borderWidth = '2.5px'; btnOut.style.opacity = '1';
-    btnIn.style.fontWeight = '400'; btnIn.style.borderWidth = '0.5px'; btnIn.style.opacity = '0.45';
+    btnOut.style.fontWeight = '700'; btnOut.style.borderWidth = '2.5px'; btnOut.style.opacity = '1';
+    btnIn.style.fontWeight = '400'; btnIn.style.borderWidth = '0.5px'; btnIn.style.opacity = '0.4';
   }
 }
 function setType(type) { M.type = type; applyTypeStyles(type); }
@@ -265,31 +270,38 @@ function renderBalanceStrip() {
       const diff = acc.lastReal - expected;
       const absDiff = Math.abs(diff);
       if (absDiff < 0.01) diffHtml = `<span class="balance-diff diff-balanced">Balanced</span>`;
-      else if (diff > 0) diffHtml = `<span class="balance-diff diff-pos">Bank is ${fmt(absDiff)} over expected</span>`;
-      else diffHtml = `<span class="balance-diff diff-neg">Bank is ${fmt(absDiff)} under expected</span>`;
+      else if (diff > 0) diffHtml = `<span class="balance-diff diff-pos">Bank ${fmt(absDiff)} over</span>`;
+      else diffHtml = `<span class="balance-diff diff-neg">Bank ${fmt(absDiff)} under</span>`;
     }
     return `<div class="balance-card">
       <div class="acct-label">xxxx${acc.number}</div>
       <div class="acct-name">${acc.name}</div>
-      <div class="balance-row"><span class="bl">Actual bank balance</span><span class="bv">${hasReal ? fmt(acc.lastReal) : '—'}</span></div>
-      <div class="balance-row"><span class="bl">Expected (sum of buckets)</span><span class="bv muted">${fmt(expected)}</span></div>
-      ${diffHtml}
-      <div class="as-of">${hasReal ? 'As of ' + acc.lastRealDate : 'No reconciliation recorded yet'}</div>
+      <div class="balance-rows">
+        <div class="balance-item"><div class="bl">Actual balance</div><div class="bv">${hasReal ? fmt(acc.lastReal) : '—'}</div></div>
+        <div class="balance-item"><div class="bl">Expected</div><div class="bv muted">${fmt(expected)}</div></div>
+      </div>
+      <div class="balance-meta">
+        ${diffHtml}
+        <span class="as-of">${hasReal ? 'As of ' + acc.lastRealDate : 'Not yet reconciled'}</span>
+      </div>
     </div>`;
   }).join('');
 }
 
 function renderAccountsGrid() {
   return S.accounts.map(acc => {
-    const buckets = S.buckets.filter(b => String(b.accountId) === String(acc.id));
+    const buckets = S.buckets.filter(b => b.accountId === String(acc.id));
     return `<div class="account-card">
       <div class="account-header">
         <div><div class="account-number">xxxx${acc.number}</div><div class="account-name">${acc.name}</div></div>
-        <div class="account-total"><div class="lbl">Expected balance</div><div class="amt">${fmt(acctTotal(acc.id))}</div></div>
+        <div class="account-total"><div class="lbl">Expected</div><div class="amt">${fmt(acctTotal(acc.id))}</div></div>
       </div>
       <div>${buckets.map(b => `
-        <div class="bucket-row ${S.selected === String(b.id) ? 'active' : ''}" onclick="selectBucket('${b.id}')">
-          <div><div class="bucket-name">${b.name}</div><div class="bucket-monthly">+${fmt(b.monthlyIn)}/mo</div></div>
+        <div class="bucket-row ${S.selected === b.id ? 'active' : ''}" onclick="selectBucket('${b.id}')">
+          <div class="bucket-left">
+            <div class="bucket-name">${b.name}</div>
+            <div class="bucket-monthly">+${fmt(b.monthlyIn)}/mo</div>
+          </div>
           <div class="bucket-balance">${fmt(bucketBal(b.id))}</div>
         </div>`).join('')}
       </div>
@@ -299,33 +311,33 @@ function renderAccountsGrid() {
 }
 
 function renderDetailPanel() {
-  if (!S.selected) return `<div class="no-selection">Select a bucket above to view its T-account ledger</div>`;
-  const b = S.buckets.find(x => String(x.id) === String(S.selected));
+  if (!S.selected) return `<div class="no-selection">Tap a bucket above to view its ledger</div>`;
+  const b = S.buckets.find(x => x.id === S.selected);
   if (!b) return '';
-  const txns = S.txns.filter(t => String(t.bucketId) === String(b.id)).sort((a,z) => String(a.date).localeCompare(String(z.date)));
+  const txns = S.txns.filter(t => t.bucketId === b.id).sort((a,z) => String(a.date).localeCompare(String(z.date)));
   const ins = txns.filter(t => t.type === 'in');
   const outs = txns.filter(t => t.type === 'out');
   const totalIn = ins.reduce((s,t) => s + t.amount, 0);
   const totalOut = outs.reduce((s,t) => s + t.amount, 0);
-  const acc = S.accounts.find(a => String(a.id) === String(b.accountId));
+  const acc = S.accounts.find(a => a.id === b.accountId);
   const entryHtml = (arr, cls) => arr.length === 0
-    ? `<span style="font-size:12px;color:var(--text-secondary)">None yet</span>`
+    ? `<div class="no-entries">None yet</div>`
     : arr.map(t => `<div class="t-entry${t.isArchiveEntry ? ' archived-entry' : ''}">
         <div class="entry-info">
-          <div class="t-entry-desc" title="${t.desc}">${t.desc}${t.isArchiveEntry ? ' <span class="archive-badge">archive</span>' : ''}</div>
+          <div class="t-entry-desc">${t.desc}${t.isArchiveEntry ? '<span class="archive-badge">archive</span>' : ''}</div>
           <div class="t-entry-date">${fmtDate(t.date)}</div>
         </div>
         <div class="t-entry-amount ${cls}">${cls === 'in' ? '+' : '-'}${fmt(t.amount)}</div>
-        ${!t.isArchiveEntry ? `<div class="entry-actions">
+        ${!t.isArchiveEntry ? `<div class="entry-btns">
           <button onclick="openEdit('${t.id}')">Edit</button>
           <button class="del" onclick="deleteTxn('${t.id}')">Del</button>
-        </div>` : '<div class="entry-actions"></div>'}
+        </div>` : ''}
       </div>`).join('');
   return `<div class="panel">
     <div class="panel-header">
-      <div>
+      <div style="flex:1;min-width:0;">
         <div class="panel-title">${b.name}</div>
-        <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">+${fmt(b.monthlyIn)}/month &middot; <span class="badge">xxxx${acc ? acc.number : ''}</span></div>
+        <div class="panel-subtitle">+${fmt(b.monthlyIn)}/month &middot; <span class="badge">xxxx${acc ? acc.number : ''}</span></div>
       </div>
       <div class="panel-balance">${fmt(totalIn - totalOut)}</div>
     </div>
@@ -339,9 +351,9 @@ function renderDetailPanel() {
         <div class="t-entries">${entryHtml(outs, 'out')}</div>
       </div>
     </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-      ${txns.length > 0 ? `<button class="btn-archive" onclick="openArchive('${b.id}')">Archive transactions</button>` : '<span></span>'}
-      <button class="btn" onclick="openAdd('${b.id}')">+ Add transaction</button>
+    <div class="panel-footer">
+      ${txns.length > 0 ? `<button class="btn-archive" onclick="openArchive('${b.id}')">Archive</button>` : '<span></span>'}
+      <button class="btn btn-sm" onclick="openAdd('${b.id}')">+ Add transaction</button>
     </div>
   </div>`;
 }
@@ -349,39 +361,41 @@ function renderDetailPanel() {
 function renderAll() {
   document.getElementById('main-content').innerHTML = `
     <div class="balance-strip">${renderBalanceStrip()}</div>
-    <div class="accounts-grid">${renderAccountsGrid()}</div>
+    <div class="accounts-list">${renderAccountsGrid()}</div>
     <div id="detail-panel">${renderDetailPanel()}</div>`;
 }
 
 function selectBucket(id) {
-  S.selected = S.selected === String(id) ? null : String(id);
+  S.selected = S.selected === id ? null : id;
   renderAll();
+  if (S.selected) setTimeout(() => { const el = document.getElementById('detail-panel'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
 }
 
 function openAdd(bucketId) {
-  M = { mode: 'add', type: 'out', bucketId: bucketId || S.selected || String(S.buckets[0]?.id), amount: '', desc: '', date: new Date().toISOString().slice(0,10) };
+  M = { mode: 'add', type: 'out', bucketId: bucketId || S.selected || S.buckets[0]?.id, amount: '', desc: '', date: new Date().toISOString().slice(0,10) };
   showTxnModal();
 }
 function openEdit(txnId) {
-  const t = S.txns.find(x => String(x.id) === String(txnId));
-  M = { mode: 'edit', txnId: String(t.id), type: t.type, bucketId: String(t.bucketId), amount: t.amount, desc: t.desc, date: t.date };
+  const t = S.txns.find(x => x.id === String(txnId));
+  M = { mode: 'edit', txnId: t.id, type: t.type, bucketId: t.bucketId, amount: t.amount, desc: t.desc, date: t.date };
   showTxnModal();
 }
 function showTxnModal() {
   const isEdit = M.mode === 'edit';
   const bucketOpts = S.buckets.map(b => {
-    const acc = S.accounts.find(a => String(a.id) === String(b.accountId));
-    return `<option value="${b.id}" ${String(b.id) === String(M.bucketId) ? 'selected' : ''}>${b.name} (xxxx${acc ? acc.number : ''})</option>`;
+    const acc = S.accounts.find(a => a.id === b.accountId);
+    return `<option value="${b.id}" ${b.id === M.bucketId ? 'selected' : ''}>${b.name} (xxxx${acc ? acc.number : ''})</option>`;
   }).join('');
   document.getElementById('modal-root').innerHTML = `<div class="overlay" onclick="if(event.target===this)closeModal()">
-    <div class="modal" style="width:380px;">
+    <div class="modal">
+      <div class="modal-handle"></div>
       <h3>${isEdit ? 'Edit transaction' : 'Add transaction'}</h3>
-      <div style="display:flex;gap:10px;margin-bottom:16px;">
-        <button id="type-btn-in" onclick="setType('in')" style="flex:1;padding:10px;font-size:13px;font-family:var(--font);border-radius:var(--radius-md);cursor:pointer;background:transparent;color:var(--text-success);border:0.5px solid var(--border-secondary);">+ Money in</button>
-        <button id="type-btn-out" onclick="setType('out')" style="flex:1;padding:10px;font-size:13px;font-family:var(--font);border-radius:var(--radius-md);cursor:pointer;background:transparent;color:var(--text-danger);border:0.5px solid var(--border-secondary);">- Money out</button>
+      <div class="type-toggle">
+        <button id="type-btn-in" onclick="setType('in')" style="color:var(--text-success);border-color:var(--border-success);">+ Money in</button>
+        <button id="type-btn-out" onclick="setType('out')" style="color:var(--text-danger);border-color:var(--border-danger);">- Money out</button>
       </div>
       <div class="form-group"><label class="form-label">Bucket</label><select id="f-bucket">${bucketOpts}</select></div>
-      <div class="form-group"><label class="form-label">Amount</label><input type="number" id="f-amount" placeholder="0.00" step="0.01" min="0" value="${M.amount}" /></div>
+      <div class="form-group"><label class="form-label">Amount</label><input type="number" id="f-amount" placeholder="0.00" step="0.01" min="0" value="${M.amount}" inputmode="decimal" /></div>
       <div class="form-group"><label class="form-label">Description</label><input type="text" id="f-desc" placeholder="e.g. April deposit" value="${M.desc}" /></div>
       <div class="form-group"><label class="form-label">Date</label><input type="text" id="f-date" placeholder="YYYY-MM-DD" value="${M.date}" /></div>
       <div class="modal-actions">
@@ -404,62 +418,59 @@ async function saveTxn() {
   closeModal();
   toast('Saving...');
   if (M.mode === 'edit') {
-    await api({ action: 'updateTxn', id: M.txnId, type: txnType, amount,
-      desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, bucketId });
-    const t = S.txns.find(x => String(x.id) === String(M.txnId));
-    if (t) Object.assign(t, { type: txnType, amount,
-      desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, bucketId });
+    await api({ action: 'updateTxn', id: M.txnId, type: txnType, amount, desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, bucketId });
+    const t = S.txns.find(x => x.id === M.txnId);
+    if (t) Object.assign(t, { type: txnType, amount, desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, bucketId });
   } else {
-    const result = await api({ action: 'saveTxn', bucketId, type: txnType, amount,
-      desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, isArchiveEntry: false });
-    S.txns.push({ id: result.id, bucketId, type: txnType, amount,
-      desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, isArchiveEntry: false });
-    S.selected = String(bucketId);
+    const result = await api({ action: 'saveTxn', bucketId, type: txnType, amount, desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, isArchiveEntry: false });
+    S.txns.push({ id: result.id, bucketId, type: txnType, amount, desc: desc || (txnType === 'in' ? 'Deposit' : 'Expense'), date, isArchiveEntry: false });
+    S.selected = bucketId;
   }
   toast('Saved');
   renderAll();
 }
-  
+
 async function deleteTxn(id) {
   if (!confirm('Delete this transaction?')) return;
   closeModal();
   toast('Deleting...');
   await api({ action: 'deleteTxn', id });
-  S.txns = S.txns.filter(t => String(t.id) !== String(id));
+  S.txns = S.txns.filter(t => t.id !== String(id));
   toast('Deleted');
   renderAll();
 }
 
 function openRecon(accountId) {
   M = { mode: 'recon', accountId: String(accountId) };
-  const acc = S.accounts.find(a => String(a.id) === String(accountId));
+  const acc = S.accounts.find(a => a.id === String(accountId));
   const expected = acctTotal(accountId);
   document.getElementById('modal-root').innerHTML = `<div class="overlay" onclick="if(event.target===this)closeModal()">
     <div class="modal">
+      <div class="modal-handle"></div>
       <h3>Reconcile — ${acc.name}</h3>
       <div class="recon-summary">
-        ${S.buckets.filter(b => String(b.accountId) === String(accountId)).map(b =>
+        ${S.buckets.filter(b => b.accountId === String(accountId)).map(b =>
           `<div class="recon-row"><span>${b.name}</span><span>${fmt(bucketBal(b.id))}</span></div>`
         ).join('')}
-        <div class="recon-row bold"><span>Total expected in bank</span><span>${fmt(expected)}</span></div>
+        <div class="recon-row bold"><span>Total expected</span><span>${fmt(expected)}</span></div>
       </div>
       <div class="step-label">Step 1 — current bank balance</div>
       <div class="form-group">
         <label class="form-label">What does your bank show right now?</label>
-        <input type="number" id="f-current" placeholder="e.g. 4823.17" step="0.01" min="0" oninput="onCurrentInput(this.value)" />
+        <input type="number" id="f-current" placeholder="e.g. 4823.17" step="0.01" min="0" inputmode="decimal" oninput="onCurrentInput(this.value)" />
       </div>
       <div id="recon-action-area"></div>
       <div id="recon-step2-area"></div>
       <div class="modal-actions" style="margin-top:14px;">
         <button style="background:transparent;color:var(--text-secondary);" onclick="closeModal()">Cancel</button>
-        <button id="save-recon-btn" style="background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary);opacity:0.4;" disabled onclick="logRecon()">Save reconciliation</button>
+        <button id="save-recon-btn" style="background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary);opacity:0.4;" disabled onclick="logRecon()">Save</button>
       </div>
     </div>
   </div>`;
 }
 
 function onCurrentInput(val) {
-  const acc = S.accounts.find(a => String(a.id) === String(M.accountId));
+  const acc = S.accounts.find(a => a.id === M.accountId);
   const expected = acctTotal(M.accountId);
   const current = parseFloat(val);
   const hasCurrent = val !== '' && !isNaN(current);
@@ -475,10 +486,10 @@ function onCurrentInput(val) {
     step2Label = 'Confirm the current balance to save it';
   } else if (diff > 0) {
     actionHtml = `<div class="recon-action transfer-out">Transfer <strong>${fmt(absDiff)}</strong> OUT of ${acc.name}, then enter the new balance below.</div>`;
-    step2Label = 'New bank balance after completing the transfer';
+    step2Label = 'New balance after transfer';
   } else {
     actionHtml = `<div class="recon-action transfer-in">Transfer <strong>${fmt(absDiff)}</strong> INTO ${acc.name}, then enter the new balance below.</div>`;
-    step2Label = 'New bank balance after completing the transfer';
+    step2Label = 'New balance after transfer';
   }
   actionArea.innerHTML = actionHtml;
   if (!step2Area.querySelector('#f-new')) {
@@ -486,7 +497,7 @@ function onCurrentInput(val) {
       <div class="step-label">Step 2 — confirm final balance</div>
       <div class="form-group" style="margin-bottom:0;">
         <label class="form-label" id="step2-label">${step2Label}</label>
-        <input type="number" id="f-new" placeholder="e.g. 4823.17" step="0.01" min="0" oninput="onNewInput(this.value)" />
+        <input type="number" id="f-new" placeholder="e.g. 4823.17" step="0.01" min="0" inputmode="decimal" oninput="onNewInput(this.value)" />
       </div>
     </div>`;
   } else {
@@ -498,39 +509,36 @@ function onNewInput(val) {
   const btn = document.getElementById('save-recon-btn');
   if (!btn) return;
   const has = val !== '' && !isNaN(parseFloat(val));
-  btn.disabled = !has;
-  btn.style.opacity = has ? '1' : '0.4';
+  btn.disabled = !has; btn.style.opacity = has ? '1' : '0.4';
 }
 async function logRecon() {
   const newVal = document.getElementById('f-new');
   if (!newVal) return;
   const lastReal = parseFloat(newVal.value);
   const lastRealDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  closeModal();
-  toast('Saving reconciliation...');
+  closeModal(); toast('Saving...');
   await api({ action: 'saveRecon', id: M.accountId, lastReal, lastRealDate });
-  const acc = S.accounts.find(a => String(a.id) === String(M.accountId));
-  acc.lastReal = lastReal;
-  acc.lastRealDate = lastRealDate;
-  toast('Saved');
-  renderAll();
+  const acc = S.accounts.find(a => a.id === M.accountId);
+  acc.lastReal = lastReal; acc.lastRealDate = lastRealDate;
+  toast('Saved'); renderAll();
 }
 
 function openArchive(bucketId) {
-  const b = S.buckets.find(x => String(x.id) === String(bucketId));
+  const b = S.buckets.find(x => x.id === String(bucketId));
   const bal = bucketBal(bucketId);
-  const txnCount = S.txns.filter(t => String(t.bucketId) === String(bucketId)).length;
+  const txnCount = S.txns.filter(t => t.bucketId === String(bucketId)).length;
   const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   document.getElementById('modal-root').innerHTML = `<div class="overlay" onclick="if(event.target===this)closeModal()">
-    <div class="modal" style="width:400px;">
-      <h3>Archive transactions — ${b.name}</h3>
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <h3>Archive — ${b.name}</h3>
       <div class="archive-confirm-box">
-        <p>This will remove all <strong>${txnCount} transaction${txnCount !== 1 ? 's' : ''}</strong> from this bucket and replace them with a single entry:</p>
-        <div style="margin:10px 0;padding:10px 12px;background:var(--bg-primary);border-radius:var(--radius-md);border:0.5px solid var(--border-tertiary);">
+        <p>Removes all <strong>${txnCount} transaction${txnCount !== 1 ? 's' : ''}</strong> and replaces them with one entry:</p>
+        <div style="margin:10px 0;padding:12px;background:var(--bg-primary);border-radius:var(--radius-md);border:0.5px solid var(--border-tertiary);">
           <div style="font-size:13px;color:var(--text-secondary);">Account archived on ${today}</div>
-          <div style="font-size:15px;font-weight:500;color:var(--text-success);margin-top:2px;">+${fmt(bal)}</div>
+          <div style="font-size:17px;font-weight:600;color:var(--text-success);margin-top:4px;">+${fmt(bal)}</div>
         </div>
-        <p>The balance stays the same. All original transactions are saved in the archives tab of your Google Sheet.</p>
+        <p>Balance stays the same. Originals saved in your Google Sheet's archives tab.</p>
       </div>
       <div class="modal-actions">
         <button style="background:transparent;color:var(--text-secondary);" onclick="closeModal()">Cancel</button>
@@ -541,20 +549,16 @@ function openArchive(bucketId) {
 }
 
 async function confirmArchive(bucketId) {
-  const b = S.buckets.find(x => String(x.id) === String(bucketId));
+  const b = S.buckets.find(x => x.id === String(bucketId));
   const bal = bucketBal(bucketId);
   const today = new Date().toISOString().slice(0,10);
   const todayFmt = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-  closeModal();
-  toast('Archiving...');
+  closeModal(); toast('Archiving...');
   await api({ action: 'archiveBucket', bucketId, balance: bal, bucketName: b.name, archivedOn: today });
   S.archives.push({ bucketId, bucketName: b.name, archivedOn: today, balance: bal });
-  S.txns = S.txns.filter(t => String(t.bucketId) !== String(bucketId));
-  if (bal !== 0) {
-    S.txns.push({ id: 'arch_' + Date.now(), bucketId: String(bucketId), type: bal >= 0 ? 'in' : 'out', amount: Math.abs(bal), desc: `Account archived on ${todayFmt}`, date: today, isArchiveEntry: true });
-  }
-  toast('Archived');
-  renderAll();
+  S.txns = S.txns.filter(t => t.bucketId !== String(bucketId));
+  if (bal !== 0) S.txns.push({ id: 'arch_' + Date.now(), bucketId: String(bucketId), type: bal >= 0 ? 'in' : 'out', amount: Math.abs(bal), desc: `Account archived on ${todayFmt}`, date: today, isArchiveEntry: true });
+  toast('Archived'); renderAll();
 }
 
 function openManage() {
@@ -564,24 +568,29 @@ function openManage() {
 function showManageModal() {
   const acctOpts = S.accounts.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
   document.getElementById('modal-root').innerHTML = `<div class="overlay" onclick="if(event.target===this)closeModal()">
-    <div class="modal" style="width:460px;">
+    <div class="modal">
+      <div class="modal-handle"></div>
       <h3>Manage sinking funds</h3>
       ${S.accounts.map(acc => `
         <div class="manage-section-label">${acc.name} (xxxx${acc.number})</div>
-        ${M.edits.filter(b => String(b.accountId) === String(acc.id)).map(b => {
+        ${M.edits.filter(b => b.accountId === acc.id).map(b => {
           const i = M.edits.indexOf(b);
           return `<div class="manage-bucket-row">
-            <input type="text" value="${b.name}" oninput="M.edits[${i}].name=this.value" style="flex:2;" />
-            <input type="number" value="${b.monthlyIn}" oninput="M.edits[${i}].monthlyIn=parseFloat(this.value)||0" placeholder="$/mo" style="width:80px;flex:none;" />
+            <input type="text" value="${b.name}" oninput="M.edits[${i}].name=this.value" />
+            <input type="number" value="${b.monthlyIn}" oninput="M.edits[${i}].monthlyIn=parseFloat(this.value)||0" placeholder="$/mo" inputmode="decimal" />
             <button class="del-bucket" onclick="removeBucketEdit(${i})">Remove</button>
           </div>`;
         }).join('')}`).join('')}
       <div class="manage-section-label" style="margin-top:16px;">Add a new fund</div>
       <div class="add-bucket-row">
-        <input type="text" id="new-name" placeholder="Fund name" style="flex:2;min-width:120px;" />
-        <input type="number" id="new-monthly" placeholder="$/mo" style="width:80px;flex:none;" />
-        <select id="new-acct" style="width:140px;flex:none;">${acctOpts}</select>
-        <button class="btn" onclick="addBucketEdit()">Add</button>
+        <div class="arow">
+          <input type="text" id="new-name" placeholder="Fund name" />
+          <input type="number" id="new-monthly" placeholder="$/mo" inputmode="decimal" />
+        </div>
+        <div class="arow">
+          <select id="new-acct" style="flex:2;">${acctOpts}</select>
+          <button class="btn" onclick="addBucketEdit()" style="flex:none;">Add</button>
+        </div>
       </div>
       <div class="modal-actions" style="margin-top:16px;">
         <button style="background:transparent;color:var(--text-secondary);" onclick="closeModal()">Cancel</button>
@@ -602,19 +611,17 @@ function addBucketEdit() {
 async function saveManage() {
   const valid = M.edits.filter(b => b.name.trim());
   if (valid.length === 0) { alert('You need at least one fund'); return; }
-  const removedIds = S.buckets.filter(b => !valid.find(e => String(e.id) === String(b.id))).map(b => String(b.id));
+  const removedIds = S.buckets.filter(b => !valid.find(e => e.id === b.id)).map(b => b.id);
   if (removedIds.length > 0) {
-    const hasTxns = removedIds.some(id => S.txns.some(t => String(t.bucketId) === id));
+    const hasTxns = removedIds.some(id => S.txns.some(t => t.bucketId === id));
     if (hasTxns && !confirm('Some removed funds have transactions which will also be deleted. Continue?')) return;
-    S.txns = S.txns.filter(t => !removedIds.includes(String(t.bucketId)));
+    S.txns = S.txns.filter(t => !removedIds.includes(t.bucketId));
   }
-  closeModal();
-  toast('Saving funds...');
+  closeModal(); toast('Saving...');
   S.buckets = valid.map(b => ({ ...b, name: b.name.trim() }));
   await api({ action: 'saveBuckets', buckets: JSON.stringify(S.buckets) });
-  if (S.selected && !S.buckets.find(b => String(b.id) === S.selected)) S.selected = null;
-  toast('Saved');
-  renderAll();
+  if (S.selected && !S.buckets.find(b => b.id === S.selected)) S.selected = null;
+  toast('Saved'); renderAll();
 }
 
 function closeModal() { M = {}; document.getElementById('modal-root').innerHTML = ''; }
